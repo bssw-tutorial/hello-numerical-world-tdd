@@ -5,15 +5,10 @@ project(heat VERSION 0.5 LANGUAGES CXX)
 # setup all cmake variables
 option(BUILD_TESTS "Build the tests accompanying this program." OFF)
 
-# generate heat.hh by substituting in cmake variables
-configure_file(include/version.H.in include/version.H)
-
 add_executable(heat args.C
-                    crankn.C
                     exact.C
-                    ftcs.C
                     heat.C
-                    upwind15.C
+                    ftcs.C
                     utils.C)
 
 # To include dependencies, e.g. MPI, use

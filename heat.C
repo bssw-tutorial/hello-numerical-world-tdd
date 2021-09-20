@@ -66,18 +66,6 @@ update_solution_ftcs(int n,
     Double alpha, Double dx, Double dt,
     Double bc_0, Double bc_1);
 
-extern bool
-update_solution_upwind15(int n,
-    Double *curr, Double const *last,
-    Double alpha, Double dx, Double dt,
-    Double bc_0, Double bc_1);
-
-extern bool
-update_solution_crankn(int n,
-    Double *curr, Double const *last,
-    Double const *cn_Amat,
-    Double bc_0, Double bc_1);
-
 static void
 initialize(void)
 {
@@ -94,16 +82,11 @@ initialize(void)
         error_history = new Double[Nt]();
     }
 
-    assert(strncmp(alg, "ftcs", 4)==0 ||
-           strncmp(alg, "upwind15", 8)==0 ||
-           strncmp(alg, "crankn", 6)==0);
+    assert(strncmp(alg, "ftcs", 4)==0);
 
 #ifdef HAVE_FEENABLEEXCEPT
     feenableexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW);
 #endif
-
-    if (!strncmp(alg, "crankn", 6))
-        initialize_crankn(Nx, alpha, dx, dt, &cn_Amat);
 
     /* Initial condition */
     set_initial_condition(Nx, last, dx, ic);
@@ -143,10 +126,6 @@ update_solution()
 {
     if (!strcmp(alg, "ftcs"))
         return update_solution_ftcs(Nx, curr, last, alpha, dx, dt, bc0, bc1);
-    else if (!strcmp(alg, "upwind15"))
-        return update_solution_upwind15(Nx, curr, last, alpha, dx, dt, bc0, bc1);
-    else if (!strcmp(alg, "crankn"))
-        return update_solution_crankn(Nx, curr, last, cn_Amat, bc0, bc1);
     return false;
 }
 
